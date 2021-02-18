@@ -12,9 +12,14 @@ type (
 	the server as well as input validation.*/
 	Controller struct {
 		s *server.Server
-		c *Config
 	}
 )
+
+/*NewController creates a controller for handling and processing requests and
+responses to the server*/
+func NewController(s *server.Server, c *Config) *Controller {
+	return &Controller{s: s}
+}
 
 /*PostProfilesHandler processes request by calling the appropriate server
 operation and returns the result via the response*/

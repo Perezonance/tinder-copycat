@@ -13,6 +13,7 @@ import (
 
 	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/controllers"
 	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/server"
+	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/storage"
 	"github.com/gorilla/mux"
 	"gopkg.in/yaml.v2"
 )
@@ -80,7 +81,14 @@ func NewRouter(c *controllers.Controller) *mux.Router {
 	return r
 }
 
+//Run initializes the server with the given config
 func (c Config) Run() {
+	db := storage.NewMockDynamo()
+
+	s := server.NewServer(db)
+
+	c := controllers.NewController(s)
+
 	var runChan = make(chan os.Signal, 1)
 
 	ctx, cancel := context.WithTimeout(
@@ -91,7 +99,7 @@ func (c Config) Run() {
 
 	s := &http.Server{
 		Addr:         c.Server.Host + ":" + c.Server.Port,
-		Handler:      NewRouter(),
+		Handler:      NewRouter(c),
 		ReadTimeout:  c.Server.Timeout.Read,
 		WriteTimeout: c.Server.Timeout.Write,
 		IdleTimeout:  c.Server.Timeout.Idle,
@@ -119,13 +127,17 @@ func (c Config) Run() {
 }
 
 func main() {
-	//setup CLI flags
-	var wait time.Duration
-	flag.DurationVar(&wait, "graceful-timeout", time.Second*15, "the duration"+
-		"for which the server gracefully waits for existing connections to finish"+
-		"before shutting down - q.g. 15s or 1m")
-	flag.Parse()
 
+	cfgPath, err := ParseFlags()
+	if err != nil {
+		log.Fatal(err)
+	}
+	cfg, err := NewConfig(cfgPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	cfg.Run()
 	//server dependency initialization
 	r := mux.NewRouter()
 

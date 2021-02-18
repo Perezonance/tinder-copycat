@@ -5,6 +5,9 @@ import "time"
 /*Config is the structure used for configuring the server and its
 dependencies*/
 type Config struct {
+	Controller struct {
+	}
+
 	//Server provides server config options
 	Server struct {
 		//Host is the local machine IP Address to bidn the HTTP Server to
