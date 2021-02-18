@@ -17,7 +17,7 @@ type (
 
 /*NewController creates a controller for handling and processing requests and
 responses to the server*/
-func NewController(s *server.Server, c *Config) *Controller {
+func NewController(s *server.Server) *Controller {
 	return &Controller{s: s}
 }
 

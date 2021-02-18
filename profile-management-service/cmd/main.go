@@ -24,7 +24,7 @@ const (
 )
 
 //NewConfig returns a new decoded Config struct
-func NewConfig(configPath string) (*Config, error) {
+func newConfig(configPath string) (*Config, error) {
 	config := &Config{}
 
 	file, err := os.Open(configPath)
@@ -42,7 +42,7 @@ func NewConfig(configPath string) (*Config, error) {
 }
 
 //ValidateConfigPath ensures the path given is a proper file; not a dir
-func ValidateConfigPath(path string) error {
+func validateConfigPath(path string) error {
 	s, err := os.Stat(path)
 	if err != nil {
 		return err
@@ -56,7 +56,7 @@ func ValidateConfigPath(path string) error {
 
 /*ParseFlags will create and parts the CLI flags and returns the path to
 be used*/
-func ParseFlags() (string, error) {
+func parseFlags() (string, error) {
 	var configPath string
 
 	flag.StringVar(&configPath, "config", "./config.yml", "path to config"+
@@ -64,7 +64,7 @@ func ParseFlags() (string, error) {
 
 	flag.Parse()
 
-	if err := ValidateConfigPath(configPath); err != nil {
+	if err := validateConfigPath(configPath); err != nil {
 		return "", err
 	}
 	return configPath, nil
@@ -72,7 +72,7 @@ func ParseFlags() (string, error) {
 
 /*NewRouter initializes a Gorilla mux router and assigns all the endpoints
 to the appropriate handlers*/
-func NewRouter(c *controllers.Controller) *mux.Router {
+func newRouter(c *controllers.Controller) *mux.Router {
 	r := mux.NewRouter()
 
 	r.HandleFunc("/profiles", c.PostProfilesHandler).Methods(http.MethodPost)
@@ -82,12 +82,12 @@ func NewRouter(c *controllers.Controller) *mux.Router {
 }
 
 //Run initializes the server with the given config
-func (c Config) Run() {
+func (c Config) run() {
 	db := storage.NewMockDynamo()
 
 	s := server.NewServer(db)
 
-	c := controllers.NewController(s)
+	ct := controllers.NewController(s)
 
 	var runChan = make(chan os.Signal, 1)
 
@@ -97,9 +97,9 @@ func (c Config) Run() {
 	)
 	defer cancel()
 
-	s := &http.Server{
+	server := &http.Server{
 		Addr:         c.Server.Host + ":" + c.Server.Port,
-		Handler:      NewRouter(c),
+		Handler:      newRouter(ct),
 		ReadTimeout:  c.Server.Timeout.Read,
 		WriteTimeout: c.Server.Timeout.Write,
 		IdleTimeout:  c.Server.Timeout.Idle,
@@ -107,10 +107,10 @@ func (c Config) Run() {
 
 	signal.Notify(runChan, os.Interrupt, syscall.SIGTSTP)
 
-	log.Printf("Server is being initialized on %v\n", s.Addr)
+	log.Printf("Server is being initialized on %v\n", server.Addr)
 
 	go func() {
-		if err := s.ListenAndServe(); err != nil {
+		if err := server.ListenAndServe(); err != nil {
 			if err != http.ErrServerClosed {
 				log.Fatalf("Server failed to initialize due to errror:%v", err)
 			}
@@ -120,7 +120,7 @@ func (c Config) Run() {
 	interrupt := <-runChan
 
 	log.Printf("Server is shutting down due to %v\n", interrupt)
-	if err := s.Shutdown(ctx); err != nil {
+	if err := server.Shutdown(ctx); err != nil {
 		log.Fatalf("Server was unable to gracefully shutdown due to"+
 			"error:%v\n", err)
 	}
@@ -128,24 +128,14 @@ func (c Config) Run() {
 
 func main() {
 
-	cfgPath, err := ParseFlags()
+	cfgPath, err := parseFlags()
 	if err != nil {
 		log.Fatal(err)
 	}
-	cfg, err := NewConfig(cfgPath)
+	cfg, err := newConfig(cfgPath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	cfg.Run()
-	//server dependency initialization
-	r := mux.NewRouter()
-
-	c := Config
-
-	db := NewMockDynamo(dbc)
-
-	s := server.NewServer(db, c)
-
-	c := controllers.NewController(s)
+	cfg.run()
 }

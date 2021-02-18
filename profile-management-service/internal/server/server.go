@@ -14,7 +14,7 @@ type (
 
 /*NewServer initializes a new server structure with the given configuration
 and a database access utility*/
-func NewServer(db storage.Storage, c Config) *Server {
+func NewServer(db storage.Storage) *Server {
 	return &Server{db: db}
 
 }
