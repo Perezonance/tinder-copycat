@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"fmt"
 	"net/http"
 
-	"github.com/Perezonance/hello-world/util/log"
 	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/server"
+	log "github.com/Perezonance/tinder-copycat/profile-management-service/internal/util/ezLogger"
 )
 
 type (
@@ -24,6 +25,7 @@ func NewController(s *server.Server) *Controller {
 /*PostProfilesHandler processes request by calling the appropriate server
 operation and returns the result via the response*/
 func (c *Controller) PostProfilesHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("PostProfilesHandler hit")
 	writeRes(http.StatusNotImplemented, http.StatusText(http.StatusNotImplemented), w)
 	return
 }
@@ -31,6 +33,7 @@ func (c *Controller) PostProfilesHandler(w http.ResponseWriter, r *http.Request)
 /*GetProfilesHandler processes request by calling the appropriate server
 operation and returns the result via the response*/
 func (c *Controller) GetProfilesHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("GetProfilesHandler Hit")
 	writeRes(http.StatusNotImplemented, http.StatusText(http.StatusNotImplemented), w)
 	return
 }

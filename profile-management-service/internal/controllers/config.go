@@ -1,5 +1,5 @@
 package controllers
 
-//Configuration for the controller
+//Config provides configuration for the controller
 type Config struct {
 }
