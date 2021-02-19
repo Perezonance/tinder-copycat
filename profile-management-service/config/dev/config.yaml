@@ -1,6 +1,7 @@
+#config.yml
+
 server:
-  db: mock
-  config: ""
+  MockStorage: true
   host: 0.0.0.0
   port: 8080
   timeout:
