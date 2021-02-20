@@ -118,7 +118,7 @@ func newRouter(c *controllers.Controller) *mux.Router {
 }
 
 //Run initializes the server with the given config
-func (c Config) run() {
+func (c *Config) run() {
 	db := storage.NewMockDynamo()
 
 	s := server.NewServer(db)

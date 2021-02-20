@@ -44,8 +44,7 @@ func writeRes(statusCode int, message string, w http.ResponseWriter) {
 	res := []byte(message)
 	_, err := w.Write(res)
 	if err != nil {
-		log.ErrorLog()
-		// log.ErrorLog("Error while writing to ResponseWriter", err)
+		log.ErrorLog("Error while writing to ResponseWriter", err)
 		return
 	}
 	return
