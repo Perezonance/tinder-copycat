@@ -13,6 +13,7 @@ import (
 	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/controllers"
 	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/server"
 	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/storage"
+	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/util/logger"
 	"github.com/gorilla/mux"
 	"gopkg.in/yaml.v2"
 )
@@ -57,6 +58,8 @@ func parseFlags() (string, error) {
 		"file")
 
 	flag.Parse()
+
+	logger.DebugLog(fmt.Sprintf("config path:%v", configPath))
 
 	if err := validateConfigPath(configPath); err != nil {
 		return "", err
