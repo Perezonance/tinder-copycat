@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/server"
-	log "github.com/Perezonance/tinder-copycat/profile-management-service/internal/util/logger"
+	"github.com/Perezonance/tinder-copycat/profile-management-service/internal/util/logger"
 )
 
 type (
@@ -44,7 +44,7 @@ func writeRes(statusCode int, message string, w http.ResponseWriter) {
 	res := []byte(message)
 	_, err := w.Write(res)
 	if err != nil {
-		log.ErrorLog("Error while writing to ResponseWriter", err)
+		logger.ErrorLog("Error while writing to ResponseWriter", err)
 		return
 	}
 	return

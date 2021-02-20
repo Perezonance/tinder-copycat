@@ -1,5 +1,3 @@
-github.com/Perezonance/tinder-copycat v0.0.0-20210218163504-94f732ca89d8 h1:yzSQTNsFAXPzl0QYuUV0tqfnAd94bKxuKfu8EX88yLY=
-github.com/Perezonance/tinder-copycat v0.0.0-20210218163504-94f732ca89d8/go.mod h1:2d595erMxaUvapmWvP+EF1zkdYBoDExl/K7NaH3dl/U=
 github.com/gorilla/mux v1.8.0 h1:i40aqfkR1h2SlN9hojwV5ZA91wcXFOvkdNIeFDP5koI=
 github.com/gorilla/mux v1.8.0/go.mod h1:DVbg23sWSpFRCP0SfiEN6jmj59UnW/n46BH5rLB71So=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405 h1:yhCVgyC4o1eVCa2tZl7eS0r+SDo693bJlVdllGtEeKM=
