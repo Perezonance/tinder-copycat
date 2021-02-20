@@ -49,8 +49,8 @@ paths:
       responses:
         "405":
           description: "Invalid input"
-        "200":
-        description: ""
+        "202":
+          description: "Accepted"
       security:
       - petstore_auth:
         - "write:profiles"
